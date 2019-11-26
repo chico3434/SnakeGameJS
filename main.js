@@ -50,13 +50,18 @@ function eatApple() {
     cell.y = snake.lastY
     snake.cells.push(cell)
     snake.size++;
+    generateApplePosition()
   }
+}
+
+function generateApplePosition() {
+  apple.x = getRandomInt(0,60) * 10
+  apple.y = getRandomInt(0,60) * 10
 }
 
 function init() {
   // gerar as coordenas da maçã aleatóriamente
-  apple.x = getRandomInt(0,60) * 10
-  apple.y = getRandomInt(0,60) * 10
+  generateApplePosition()
 
   // gerar as 3 primeiras celulas
   var cell = new Object()
