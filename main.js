@@ -9,7 +9,8 @@ const game = {
   score: 0,
   screen: {
     width: canvas.getAttribute('width'),
-    height: canvas.getAttribute('height')
+    height: canvas.getAttribute('height'),
+    backgroundColor: 'black'
   },
   snake: {},
   apple: {
@@ -94,21 +95,8 @@ function initSnake() {
       }
     ],
   }
-}
-
-function initSnakeCells() {
-  var cell = new Object()
-  cell.x = 400
-  cell.y = 400
-  game.snake.cells.push(cell)
-  cell = new Object()
-  cell.x = 400
-  cell.y = 390
-  game.snake.cells.push(cell)
-  cell = new Object()
-  cell.x = 400
-  cell.y = 380
-  game.snake.cells.push(cell)
+  // caso seja reinicio, manter a cor definida
+  changeSnake()
 }
 
 function init() {
@@ -117,15 +105,9 @@ function init() {
 
   // inicializar o objeto cobra
   initSnake()
-  console.log(game.snake)
-
-  // gerar as 3 primeiras celulas
-  //initSnakeCells()
-  //console.log(snake)
 
   // inicializar a pontuação
   initScore()
-  console.log(game.score)
 
   // Chamar o update pela primeira vez
   update();
@@ -180,7 +162,7 @@ function update() {
 
 function draw() {
   // definindo fundo preto
-  ctx.fillStyle = "black"
+  ctx.fillStyle = game.screen.backgroundColor
   ctx.fillRect(0,0,game.screen.width,game.screen.height)
 
   // draw apple
@@ -200,3 +182,25 @@ document.addEventListener('keydown', function(event){
     game.snake.direction = event.key
   }
 })
+
+function changeSnake() {
+  var snakeColor = document.getElementById('snakeColor').value
+  game.snake.color = snakeColor
+}
+
+function changeApple() {
+  var appleColor = document.getElementById('appleColor').value
+  game.apple.color = appleColor
+}
+
+function changeBackground() {
+  var backgroundColor = document.getElementById('backgroundColor').value
+  game.screen.backgroundColor = backgroundColor
+
+  // Caso o fundo seja alterado para branco a borda não poderá mais ser branca, pois iria confundir o jogador
+  if(backgroundColor == "White") {
+    canvas.style = "border-color: black"
+  } else {
+    canvas.style = "border-color: white"
+  }
+}

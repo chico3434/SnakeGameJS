@@ -13,6 +13,47 @@
     <h2>Score: <span id="score">0</span></h2>
     <canvas id="draw" width="600" height="600"></canvas><br>
     <button id="restart" onclick="init()">Reiniciar</button>
+    <div id="controls">
+
+      <!-- Snake -->
+
+      <label for="snakeColor">Snake Color</label>
+      <select name="snakeColor" id="snakeColor" onchange="changeSnake()">
+        <option>Green</option>
+        <option>Red</option>
+        <option>Blue</option>
+        <option>Yellow</option>
+        <option>Cyan</option>
+        <option>Magenta</option>
+      </select>
+
+      <!-- Apple -->
+
+      <label for="appleColor">Apple Color</label>
+      <select name="appleColor" id="appleColor" onchange="changeApple()">
+        <option>Red</option>
+        <option>Green</option>
+        <option>Blue</option>
+        <option>Yellow</option>
+        <option>Cyan</option>
+        <option>Magenta</option>
+      </select>
+
+      <!-- Background -->
+
+      <label for="backgroundColor">Background Color</label>
+      <select name="backgroundColor" id="backgroundColor" onchange="changeBackground()">
+        <option>Black</option>
+        <option>Grey</option>
+        <option>White</option>
+        <option>Red</option>
+        <option>Green</option>
+        <option>Blue</option>
+        <option>Yellow</option>
+        <option>Cyan</option>
+        <option>Magenta</option>
+      </select>
+    </div>
   </section>
   <script src="main.js"></script>
 </body>

@@ -48,3 +48,31 @@ section h2 {
     color: white;
     transition: all 1s;
 }
+
+#controls {
+    margin-top: 20px;
+    padding: 20px;
+    background: #999999;
+    display: flex;
+    justify-content: center;
+
+}
+
+#controls label {
+    color: white;
+    font-family: sans-serif;
+    font-size: 16px;
+    margin-right: 5px;
+    position: relative;
+    top: 2px;
+}
+
+#controls select {
+    background: white; 
+    border: 2px solid white;
+    border-radius: 5px;
+    color: #333;
+    font-family: sans-serif;
+
+    margin-right: 5px;
+}
