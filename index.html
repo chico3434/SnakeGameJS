@@ -3,10 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>SnakeGame</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <canvas id="draw" width="600" height="600"></canvas>
-
+<body onload="init()">
+  <nav>
+    <h1>Snake Game</h1>
+  </nav>
+  <section>
+    <h2>Score: <span id="score">0</span></h2>
+    <canvas id="draw" width="600" height="600"></canvas><br>
+    <button id="restart" onclick="init()">Reiniciar</button>
+  </section>
   <script src="main.js"></script>
 </body>
 </html>

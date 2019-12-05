@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #aaaaaa;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    background: #666666;
+}
+
+nav h1 {
+    color: white;
+    font-family: sans-serif;
+    font-size: 32px;
+    text-shadow: 1px 1px 2px black;
+}
+
+section {
+    text-align: center;
+}
+
+section canvas {
+    border: 10px solid white;
+    box-shadow: 0px 0px 4px black;
+}
+
+section h2 {
+    color: white;
+    font-family: sans-serif;
+    font-size: 24px;
+    text-shadow: 1px 1px 2px black;
+}
+
+#restart {
+    background: white;
+    padding: 10px;
+    border: 2px solid white;
+    border-radius: 10px;
+    color: #333;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+#restart:hover {
+    background: #999;
+    color: white;
+    transition: all 1s;
+}
