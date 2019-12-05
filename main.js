@@ -22,6 +22,32 @@ const game = {
   }
 }
 
+function draw() {
+  // definindo fundo preto
+  ctx.fillStyle = game.screen.backgroundColor
+  ctx.fillRect(0,0,game.screen.width,game.screen.height)
+
+  // draw apple
+  ctx.fillStyle = game.apple.color
+  ctx.fillRect(game.apple.x, game.apple.y, game.apple.width, game.apple.height)
+
+  // draw snake
+  ctx.fillStyle = game.snake.color
+  for(var i = 0; i < game.snake.size; i++) {
+    ctx.fillRect(game.snake.cells[i].x, game.snake.cells[i].y, game.snake.cellWidth, game.snake.cellHeight)
+  }
+}
+
+function drawGameOver() {
+  ctx.fillStyle = game.screen.backgroundColor
+  ctx.fillRect(0,0,game.screen.width, game.screen.height)
+
+  ctx.fillStyle = game.snake.color
+  ctx.font = "50px Arial";
+  ctx.fillText("Game Over", 100, 200);
+  ctx.fillText("Score: " + game.score, 100, 250)  
+}
+
 function getRandomInt(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
@@ -62,6 +88,7 @@ function updateScore() {
 function initSnake() {
   game.snake = {
     size: 3,
+    alive: true,
     cellWidth: boxSize,
     cellHeight: boxSize,
     direction: 'ArrowUp',
@@ -79,7 +106,7 @@ function initSnake() {
       game.snake.cells[0].x += game.snake.cellWidth
     },
     lastX: 400,
-    lastY: 380,
+    lastY: 420,
     cells: [
       cell = {
         x: 400,
@@ -87,11 +114,11 @@ function initSnake() {
       },
       cell = {
         x: 400,
-        y: 390
+        y: 410
       },
       cell = {
         x: 400,
-        y: 380
+        y: 420
       }
     ],
   }
@@ -133,10 +160,24 @@ function checkBorderCollisions() {
   }
 }
 
-function update() {
-  // pegar as coordenadas da última célula 
-  getLastCoordinates()
+function checkSelfCollision() {
+  for(var i = 1; i < game.snake.size; i++) {
+    if(game.snake.cells[0].x == game.snake.cells[i].x && game.snake.cells[0].y == game.snake.cells[i].y) {
+      console.log("Game Over\nx[0]: " + game.snake.cells[0].x + " == " + `x[${i}]: ` + game.snake.cells[i].x + "\ny[0]: " + game.snake.cells[0].y + " == " + `y[${i}]: ` + game.snake.cells[i].y)
+      return true
+    }
+  }
+  return false
+}
 
+function checkGameOver() {
+  if(checkSelfCollision()) {
+    game.snake.alive = false
+    drawGameOver()
+  }
+}
+
+function moveSnake() {
   // mover as celulas com exceção da cabeça 
   for(var i = game.snake.size-1; i > 0; i--){
     game.snake.cells[i].x = game.snake.cells[i-1].x
@@ -146,6 +187,13 @@ function update() {
   // mover a cabeça
   var headMove = game.snake[game.snake.direction];
   headMove()
+}
+
+function update() {
+  // pegar as coordenadas da última célula 
+  getLastCoordinates()
+
+  moveSnake()
 
   // Checar limites do canvas
   checkBorderCollisions()
@@ -153,33 +201,22 @@ function update() {
   // desenhar na tela
   draw()
 
+  // Checar possibilidades de GameOver
+  checkGameOver()
+
   // checar se comeu a maçã e caso tenha comido tomar as providências
   eatApple()
 
   // se chamar em 100 ms
-  setTimeout(update, 100)
-}
-
-function draw() {
-  // definindo fundo preto
-  ctx.fillStyle = game.screen.backgroundColor
-  ctx.fillRect(0,0,game.screen.width,game.screen.height)
-
-  // draw apple
-  ctx.fillStyle = game.apple.color
-  ctx.fillRect(game.apple.x, game.apple.y, game.apple.width, game.apple.height)
-
-  // draw snake
-  ctx.fillStyle = game.snake.color
-  for(var i = 0; i < game.snake.size; i++) {
-    ctx.fillRect(game.snake.cells[i].x, game.snake.cells[i].y, game.snake.cellWidth, game.snake.cellHeight)
-  }
+  if(game.snake.alive)
+    setTimeout(update, 100)
 }
 
 // ouvir teclado
 document.addEventListener('keydown', function(event){
   if(event.key == 'ArrowUp' || event.key == 'ArrowDown' || event.key == 'ArrowLeft' || event.key == 'ArrowRight'){
-    game.snake.direction = event.key
+    if(game.snake.direction == 'ArrowUp' && event.key != 'ArrowDown' || game.snake.direction == 'ArrowDown' && event.key != 'ArrowUp' || game.snake.direction == 'ArrowLeft' && event.key != 'ArrowRight' || game.snake.direction == 'ArrowRight' && event.key != 'ArrowLeft')
+      game.snake.direction = event.key
   }
 })
 
