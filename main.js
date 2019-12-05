@@ -2,12 +2,19 @@ var canvas = document.getElementById('draw')
 
 var ctx = canvas.getContext('2d')
 
+const boxSize = 10
+
+const screen = {
+  width: canvas.getAttribute('width'),
+  height: canvas.getAttribute('height')
+}
+
 var snake = {
   size: 3,
-  cellWidth: 10,
-  cellHeight: 10,
+  cellWidth: boxSize,
+  cellHeight: boxSize,
   direction: 'ArrowUp',
-  color: 'rgb(0,255,0)',
+  color: 'green',
   ArrowUp: () => {
      snake.cells[0].y -= snake.cellHeight 
     },
@@ -28,9 +35,9 @@ var snake = {
 var apple = {
   x: 290,
   y: 290,
-  width: 10,
-  height: 10,
-  color: 'rgb(255,0,0)'
+  width: boxSize,
+  height: boxSize,
+  color: 'red'
 }
 
 function getRandomInt(min, max) {
@@ -55,8 +62,8 @@ function eatApple() {
 }
 
 function generateApplePosition() {
-  apple.x = getRandomInt(0,60) * 10
-  apple.y = getRandomInt(0,60) * 10
+  apple.x = getRandomInt(0, screen.width/apple.width) * apple.width
+  apple.y = getRandomInt(0, screen.height/apple.height) * apple.height
 }
 
 function init() {
@@ -96,31 +103,32 @@ function update() {
   var headMove = snake[snake.direction];
   headMove()
   // Checar limites do canvas
-  if(snake.cells[0].x == -10){
-    snake.cells[0].x = 590
+  if(snake.cells[0].x == -snake.cellWidth){
+    snake.cells[0].x = screen.width - snake.cellWidth
   }
-  if(snake.cells[0].x == 600){
+  if(snake.cells[0].x == screen.width){
     snake.cells[0].x = 0
   }
-  if(snake.cells[0].y == -10){
-    snake.cells[0].y = 590
+  if(snake.cells[0].y == -snake.cellHeight){
+    snake.cells[0].y = screen.height - snake.cellHeight
   }
-  if(snake.cells[0].y == 600){
+  if(snake.cells[0].y == screen.height){
     snake.cells[0].y = 0
   }
-  // checar se comeu a maçã e caso tenha comido tomar as providências
-  eatApple()
 
   // desenhar na tela
   draw()
+
+  // checar se comeu a maçã e caso tenha comido tomar as providências
+  eatApple()
   // se chamar em 100 ms
   setTimeout(update, 100)
 }
 
 function draw() {
   // definindo fundo preto
-  ctx.fillStyle = "rgb(0,0,0)"
-  ctx.fillRect(0,0,600,600)
+  ctx.fillStyle = "black"
+  ctx.fillRect(0,0,screen.width,screen.height)
 
   // draw apple
   ctx.fillStyle = apple.color
