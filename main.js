@@ -6,22 +6,19 @@ var score = document.getElementById('score')
 const boxSize = 10
 
 const game = {
-  score: 0
-}
-
-const screen = {
-  width: canvas.getAttribute('width'),
-  height: canvas.getAttribute('height')
-}
-
-var snake = {}
-
-var apple = {
-  x: 290,
-  y: 290,
-  width: boxSize,
-  height: boxSize,
-  color: 'red'
+  score: 0,
+  screen: {
+    width: canvas.getAttribute('width'),
+    height: canvas.getAttribute('height')
+  },
+  snake: {},
+  apple: {
+    x: 290,
+    y: 290,
+    width: boxSize,
+    height: boxSize,
+    color: 'red'
+  }
 }
 
 function getRandomInt(min, max) {
@@ -31,24 +28,24 @@ function getRandomInt(min, max) {
 }
 
 function detectCollision() {
-  return (snake.cells[0].x == apple.x && snake.cells[0].y == apple.y)
+  return (game.snake.cells[0].x == game.apple.x && game.snake.cells[0].y == game.apple.y)
 }
 
 function eatApple() {
   if(detectCollision()) {
     var cell = new Object()
-    cell.x = snake.lastX
-    cell.y = snake.lastY
-    snake.cells.push(cell)
-    snake.size++;
+    cell.x = game.snake.lastX
+    cell.y = game.snake.lastY
+    game.snake.cells.push(cell)
+    game.snake.size++;
     updateScore()
     generateApplePosition()
   }
 }
 
 function generateApplePosition() {
-  apple.x = getRandomInt(0, screen.width/apple.width) * apple.width
-  apple.y = getRandomInt(0, screen.height/apple.height) * apple.height
+  game.apple.x = getRandomInt(0, game.screen.width/game.apple.width) * game.apple.width
+  game.apple.y = getRandomInt(0, game.screen.height/game.apple.height) * game.apple.height
 }
 
 function initScore() {
@@ -62,27 +59,40 @@ function updateScore() {
 }
 
 function initSnake() {
-  snake = {
+  game.snake = {
     size: 3,
     cellWidth: boxSize,
     cellHeight: boxSize,
     direction: 'ArrowUp',
     color: 'green',
     ArrowUp: () => {
-       snake.cells[0].y -= snake.cellHeight 
-      },
+      game.snake.cells[0].y -= game.snake.cellHeight 
+    },
     ArrowDown: () => {
-       snake.cells[0].y += snake.cellHeight
-      },
+      game.snake.cells[0].y += game.snake.cellHeight
+    },
     ArrowLeft: () => {
-       snake.cells[0].x -= snake.cellWidth
-      },
+      game.snake.cells[0].x -= game.snake.cellWidth
+    },
     ArrowRight: () => {
-       snake.cells[0].x += snake.cellWidth
-      },
+      game.snake.cells[0].x += game.snake.cellWidth
+    },
     lastX: 400,
     lastY: 380,
-    cells: [],
+    cells: [
+      cell = {
+        x: 400,
+        y: 400
+      },
+      cell = {
+        x: 400,
+        y: 390
+      },
+      cell = {
+        x: 400,
+        y: 380
+      }
+    ],
   }
 }
 
@@ -90,15 +100,15 @@ function initSnakeCells() {
   var cell = new Object()
   cell.x = 400
   cell.y = 400
-  snake.cells.push(cell)
+  game.snake.cells.push(cell)
   cell = new Object()
   cell.x = 400
   cell.y = 390
-  snake.cells.push(cell)
+  game.snake.cells.push(cell)
   cell = new Object()
   cell.x = 400
   cell.y = 380
-  snake.cells.push(cell)
+  game.snake.cells.push(cell)
 }
 
 function init() {
@@ -107,11 +117,11 @@ function init() {
 
   // inicializar o objeto cobra
   initSnake()
-  console.log(snake)
+  console.log(game.snake)
 
   // gerar as 3 primeiras celulas
-  initSnakeCells()
-  console.log(snake)
+  //initSnakeCells()
+  //console.log(snake)
 
   // inicializar a pontuação
   initScore()
@@ -122,22 +132,22 @@ function init() {
 }
 
 function getLastCoordinates() {
-  lastX = snake.cells[snake.size-1].x
-  lastY = snake.cells[snake.size-1].y
+  lastX = game.snake.cells[game.snake.size-1].x
+  lastY = game.snake.cells[game.snake.size-1].y
 }
 
 function checkBorderCollisions() {
-  if(snake.cells[0].x == -snake.cellWidth){
-    snake.cells[0].x = screen.width - snake.cellWidth
+  if(game.snake.cells[0].x == -game.snake.cellWidth){
+    game.snake.cells[0].x = game.screen.width - game.snake.cellWidth
   }
-  if(snake.cells[0].x == screen.width){
-    snake.cells[0].x = 0
+  if(game.snake.cells[0].x == game.screen.width){
+    game.snake.cells[0].x = 0
   }
-  if(snake.cells[0].y == -snake.cellHeight){
-    snake.cells[0].y = screen.height - snake.cellHeight
+  if(game.snake.cells[0].y == -game.snake.cellHeight){
+    game.snake.cells[0].y = game.screen.height - game.snake.cellHeight
   }
-  if(snake.cells[0].y == screen.height){
-    snake.cells[0].y = 0
+  if(game.snake.cells[0].y == game.screen.height){
+    game.snake.cells[0].y = 0
   }
 }
 
@@ -146,13 +156,13 @@ function update() {
   getLastCoordinates()
 
   // mover as celulas com exceção da cabeça 
-  for(var i = snake.size-1; i > 0; i--){
-    snake.cells[i].x = snake.cells[i-1].x
-    snake.cells[i].y = snake.cells[i-1].y
+  for(var i = game.snake.size-1; i > 0; i--){
+    game.snake.cells[i].x = game.snake.cells[i-1].x
+    game.snake.cells[i].y = game.snake.cells[i-1].y
   }
 
   // mover a cabeça
-  var headMove = snake[snake.direction];
+  var headMove = game.snake[game.snake.direction];
   headMove()
 
   // Checar limites do canvas
@@ -171,22 +181,22 @@ function update() {
 function draw() {
   // definindo fundo preto
   ctx.fillStyle = "black"
-  ctx.fillRect(0,0,screen.width,screen.height)
+  ctx.fillRect(0,0,game.screen.width,game.screen.height)
 
   // draw apple
-  ctx.fillStyle = apple.color
-  ctx.fillRect(apple.x, apple.y, apple.width, apple.height)
+  ctx.fillStyle = game.apple.color
+  ctx.fillRect(game.apple.x, game.apple.y, game.apple.width, game.apple.height)
 
   // draw snake
-  ctx.fillStyle = snake.color
-  for(var i = 0; i < snake.size; i++) {
-    ctx.fillRect(snake.cells[i].x, snake.cells[i].y, snake.cellWidth, snake.cellHeight)
+  ctx.fillStyle = game.snake.color
+  for(var i = 0; i < game.snake.size; i++) {
+    ctx.fillRect(game.snake.cells[i].x, game.snake.cells[i].y, game.snake.cellWidth, game.snake.cellHeight)
   }
 }
 
 // ouvir teclado
 document.addEventListener('keydown', function(event){
   if(event.key == 'ArrowUp' || event.key == 'ArrowDown' || event.key == 'ArrowLeft' || event.key == 'ArrowRight'){
-    snake.direction = event.key
+    game.snake.direction = event.key
   }
 })
